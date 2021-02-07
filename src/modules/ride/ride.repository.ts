@@ -11,7 +11,7 @@ export class RideRepository extends Repository<Ride> {
 
     getRidesWithinDistance(startLocation: [number, number], endLocation: [number, number]) {
         // const distance = this.configService.getRadius;
-        const distance = 5000000;
+        const distance = 2000;
         return this.query(
             `SELECT *, ST_AsGeoJSON("startLocation")::json as "startLocation", ST_AsGeoJSON("endLocation")::json as "endLocation",
                 ST_AsGeoJSON("route")::json as "route", ST_Distance(route, ST_MakePoint(${startLocation[0]}, ${startLocation[1]})) * 111139 as "distanceFromStart",
