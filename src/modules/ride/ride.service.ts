@@ -103,6 +103,12 @@ export class RideService {
         if (!rideIds.length) {
             return [];
         }
+        const ridePassengerCount = await this.rideUserRepository.getRidePassengerCount(rideIds).getRawMany();
+        const rideCountMap: any = {};
+        ridePassengerCount.forEach(ride => {
+            rideCountMap[ride.ride_id] = ride;
+        })
+
         const driverIds = rides.map(ride => ride.driver_id);
         const drivers = await this.userRepository.findByIds(driverIds);
         const driverMap: any = {};
@@ -113,7 +119,10 @@ export class RideService {
         rides.forEach(ride => {
             ride.totalDistance = ride.distanceFromStart + ride.distanceFromEnd;
             ride.driver = driverMap[ride.driver_id];
+            ride.passengerCount = rideCountMap[ride.id];
         });
+
+        rides = rides.filter(ride => ride.maxPassengers > ride.passengerCount);
 
         rides = rides.sort((a, b) => a.totalDistance - b.totalDistance);
         return rides;

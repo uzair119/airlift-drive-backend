@@ -29,7 +29,7 @@ export class UsersService {
   }
 
   async getByEmailAndPass(email: string, password: string) {
-    const user = await this.userRepository.findOneOrFail({where: {email: email}, select: ['email','password']});
+    const user = await this.userRepository.findOneOrFail({where: {email: email}, select: ['email','password', 'firstName', 'lastName', 'id']});
     console.log(user);
     const valid = await Crypt.validateHash(user.password, password);
     user.password = "";

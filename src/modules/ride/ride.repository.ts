@@ -1,6 +1,6 @@
 import { ConfigService } from 'modules/config/config.service';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
-import { Ride } from './ride.entity';
+import { Ride, RideStatus } from './ride.entity';
 import { RideUserStatus } from './rideUser.entity';
 
 @EntityRepository(Ride)
@@ -18,6 +18,7 @@ export class RideRepository extends Repository<Ride> {
                 ST_Distance(route, ST_MakePoint(${endLocation[0]}, ${endLocation[1]})) * 111139 as "distanceFromEnd" from ride 
                 WHERE ST_DWithin(route, ST_MakePoint(${startLocation[0]}, ${startLocation[1]})::geography, ${distance})
                 AND ST_DWithin(route, ST_MakePoint(${endLocation[0]}, ${endLocation[1]})::geography, ${distance})
+                AND status = '${RideStatus.SCHEDULED}'
             ;`
         )
     }
