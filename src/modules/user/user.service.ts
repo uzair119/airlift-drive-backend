@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { User, UserFillableFields } from './user.entity';
 import { Crypt } from 'modules/auth/crypt';
+import { use } from 'passport';
 
 @Injectable()
 @Roles('admin') // TODO: Add 'authenticatedUser'
@@ -54,5 +55,11 @@ export class UsersService {
     payload.password = password;
     const newUser = this.userRepository.create(payload);
     return await this.userRepository.save(newUser);
+  }
+
+  async updateUserAlcs(id: number, alcs: number) {
+    const user = await this.userRepository.findOneOrFail(id);
+    user.alcs += alcs;
+    return this.userRepository.save(user);
   }
 }
