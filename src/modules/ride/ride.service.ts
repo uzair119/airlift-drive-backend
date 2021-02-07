@@ -31,6 +31,10 @@ export class RideService {
             ride.startLocation = { type: 'Point', coordinates: input.route[0] };
             ride.endLocation = { type: 'Point', coordinates: input.route[input.route.length - 1] };
             ride.perPassengerFare = input.perPassengerFare ?? 0;
+            ride.startLocationName = input.startLocationName;
+            ride.endLocationName = input.endLocationName;
+            ride.estimatedDuration = input.estimatedDuration;
+            ride.distance = input.distance;
 
             await entityManager.save(ride);
 
@@ -71,7 +75,8 @@ export class RideService {
             rideUser.ride = ride;
             rideUser.pickupLocation = { type: 'Point', coordinates: pickupLocation };
             rideUser.dropoffLocation = { type: 'Point', coordinates: dropoffLocation };
-            rideUser.status = RideUserStatus.REQUESTED;
+            // rideUser.status = RideUserStatus.REQUESTED;
+            rideUser.status = RideUserStatus.ACCEPTED;
             rideUser.fare = ride.perPassengerFare;
             user.alcs -= ride.perPassengerFare;
 
@@ -94,6 +99,10 @@ export class RideService {
 
     async getRidesWithinDistance(startLocation: [number, number], endLocation: [number, number]) {
         let rides: any[] = await this.rideRepository.getRidesWithinDistance(startLocation, endLocation);
+        const rideIds = rides.map(ride => ride.id);
+        if (!rideIds.length) {
+            return [];
+        }
         const driverIds = rides.map(ride => ride.driver_id);
         const drivers = await this.userRepository.findByIds(driverIds);
         const driverMap: any = {};

@@ -37,6 +37,16 @@ export class RideController {
         return this.rideService.getRidesWithinDistance(input.startLocation, input.endLocation);
     }
 
+    @Post('/:rideId/:userId/request')
+    async requestRide(
+        @Param('rideId') rideId: number,
+        @Param('userId') userId: number,
+        @Body('pickupLocation') pickupLocation: [number, number],
+        @Body('dropoffLocation') dropoffLocation: [number, number],
+    ) {
+        return this.rideService.requestRide(userId, rideId, pickupLocation, dropoffLocation);
+    }
+
     @Put('/:rideId/:userId/status')
     async updateRideUserStatus(@Param('rideId') rideId: number, @Param('userId') userId: number, @Body('status') status: RideUserStatus) {
         return this.rideService.updateRideUserStatus(rideId, userId, status);

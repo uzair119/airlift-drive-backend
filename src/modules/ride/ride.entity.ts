@@ -68,4 +68,16 @@ export class Ride extends BaseEntity {
 
     @Column({ default: 50 })
     perPassengerFare!: number
+
+    @Column({nullable: true})
+    startLocationName?: string;
+
+    @Column({nullable: true})
+    endLocationName?: string;
+
+    @Column({nullable: true})
+    estimatedDuration?: string;
+
+    @Column({nullable: true})
+    distance?: string;
 }

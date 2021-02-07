@@ -7,5 +7,9 @@ export namespace createRideDto {
         startLocation!: [number, number];
         endLocation!: [number, number];
         perPassengerFare?: number;
+        startLocationName?: string;
+        endLocationName?: string
+        estimatedDuration?: string;
+        distance?: string;
     }
 }
