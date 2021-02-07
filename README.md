@@ -1,3 +1,10 @@
+# To run:
+```
+npm i
+docker-compose up database (if you receive volume not existing error, execute the suggested command in the error)
+npm run start:dev
+```
+
 <h1>NestJS Boilerplate
   <a
     href="http://nestjs.com/"
