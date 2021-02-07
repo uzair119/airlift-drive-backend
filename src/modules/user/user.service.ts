@@ -53,7 +53,7 @@ export class UsersService {
     }
     const password = await Crypt.hashString(payload.password);
     payload.password = password;
-    const newUser = this.userRepository.create(payload);
+    const newUser = this.userRepository.create({ alcs: 500, ...payload });
     return await this.userRepository.save(newUser);
   }
 
