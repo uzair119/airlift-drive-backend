@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as crypto from 'crypto';
@@ -30,7 +30,10 @@ export class UsersService {
   }
 
   async getByEmailAndPass(email: string, password: string) {
-    const user = await this.userRepository.findOneOrFail({where: {email: email}, select: ['email','password', 'firstName', 'lastName', 'id']});
+    const user = await this.userRepository.findOne({where: {email: email}, select: ['email','password', 'firstName', 'lastName', 'id']});
+    if (!user) {
+      throw new NotFoundException(`User doesn't exist`);
+    }
     console.log(user);
     const valid = await Crypt.validateHash(user.password, password);
     user.password = "";

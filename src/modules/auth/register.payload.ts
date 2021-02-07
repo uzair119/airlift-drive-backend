@@ -1,5 +1,5 @@
 // import { ApiModelProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class RegisterPayload {
   // @ApiModelProperty({ required: true })
@@ -23,10 +23,10 @@ export class RegisterPayload {
   @IsNotEmpty()
   dateOfBirth!: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   carModel!: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   registrationNumber!: string;
   
   @IsNotEmpty()
