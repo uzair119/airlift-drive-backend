@@ -53,8 +53,8 @@ export class RideService {
         return this.rideRepository.find();
     }
 
-    async getRidesByUserId(userId: number, status?: RideUserStatus, isDriver?: boolean) {
-        return this.rideRepository.getRidesByUserId(userId, status, isDriver);
+    async getRidesByUserId(userId: number, rideStatus?: RideStatus, status?: RideUserStatus, isDriver?: boolean) {
+        return await this.rideRepository.getRidesByUserId(userId, rideStatus, status, isDriver).getMany();
     }
 
     async getRideDetails(rideId: number) {

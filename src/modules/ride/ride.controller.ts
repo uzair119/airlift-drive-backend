@@ -28,8 +28,8 @@ export class RideController {
     }
 
     @Get('/user/:userId')
-    async getRidesByUserId(@Param('userId') userId: number, @Query('status') status: RideUserStatus, @Query('driver') isDriver: boolean) {
-        return this.rideService.getRidesByUserId(userId, status, isDriver);
+    async getRidesByUserId(@Param('userId') userId: number, @Query('rideStatus') rideStatus: RideStatus, @Query('status') status: RideUserStatus, @Query('driver') isDriver: boolean) {
+        return this.rideService.getRidesByUserId(userId, rideStatus, status, isDriver);
     }
 
     @Post('/suggestions')

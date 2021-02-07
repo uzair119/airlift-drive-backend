@@ -23,15 +23,18 @@ export class RideRepository extends Repository<Ride> {
         )
     }
 
-    getRidesByUserId(userId: number, status?: RideUserStatus, isDriver?: boolean) {
+    getRidesByUserId(userId: number, rideStatus?: RideStatus, status?: RideUserStatus, isDriver?: boolean) {
         const query = this.createQueryBuilder('ride')
-            .innerJoinAndSelect('ride.rideUsers', 'rideUsers', 'rideUser.userId = :userId', { userId });
-            if (status) {
-                query.where('rideUser.status = :status', { status });
-            }
-            if (isDriver) {
-                query.andWhere('rideUser.isDriver = TRUE');
-            }
+            .innerJoinAndSelect('ride.rideUsers', 'rideUser', 'rideUser.userId = :userId', { userId });
+        if (status) {
+            query.where('rideUser.status = :status', { status });
+        }
+        if (isDriver) {
+            query.andWhere('rideUser.isDriver = TRUE');
+        }
+        if (rideStatus) {
+            query.andWhere('ride.status = :rideStatus', { rideStatus })
+        }
         return query;
     }
 }
