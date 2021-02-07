@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  main-api:
+    build: .
+    ports:
+      - 8080
+    depends_on:
+      - database
+      # - business-api
+
+  # business-api:
+  #   build: ./api
+  #   ports: 8081
+
+
+  database:
+    image: 'mdillon/postgis:10-alpine'
+    container_name: 'drive_db'
+    ports:
+      - '5432:5432'
+    volumes:
+      - drive_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: airlift_drive
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: airlift
+
+volumes:
+  drive_postgres_data:
+    external: true
