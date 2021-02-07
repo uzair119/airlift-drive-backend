@@ -11,7 +11,7 @@ export class RideRepository extends Repository<Ride> {
 
     getRidesWithinDistance(startLocation: [number, number], endLocation: [number, number]) {
         // const distance = this.configService.getRadius;
-        const distance = 2000;
+        const distance = 10000;
         return this.query(
             `SELECT *, ST_AsGeoJSON("startLocation")::json as "startLocation", ST_AsGeoJSON("endLocation")::json as "endLocation",
                 ST_AsGeoJSON("route")::json as "route", ST_Distance(route, ST_MakePoint(${startLocation[0]}, ${startLocation[1]})) * 111139 as "distanceFromStart",
@@ -23,14 +23,13 @@ export class RideRepository extends Repository<Ride> {
         )
     }
 
-    getRidesByUserId(userId: number, rideStatus?: RideStatus, status?: RideUserStatus, isDriver?: boolean) {
+    getRidesByIds(rideIds: number[], rideStatus?: RideStatus, status?: RideUserStatus, isDriver?: boolean) {
         const query = this.createQueryBuilder('ride')
-            .innerJoinAndSelect('ride.rideUsers', 'rideUser', 'rideUser.userId = :userId', { userId });
+            .innerJoinAndSelect('ride.rideUsers', 'rideUser')
+            .innerJoinAndSelect('rideUser.user', 'user')
+            .where('ride.id in (:...rideIds)', { rideIds })
         if (status) {
             query.where('rideUser.status = :status', { status });
-        }
-        if (isDriver) {
-            query.andWhere('rideUser.isDriver = TRUE');
         }
         if (rideStatus) {
             query.andWhere('ride.status = :rideStatus', { rideStatus })

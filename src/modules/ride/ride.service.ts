@@ -54,7 +54,15 @@ export class RideService {
     }
 
     async getRidesByUserId(userId: number, rideStatus?: RideStatus, status?: RideUserStatus, isDriver?: boolean) {
-        return await this.rideRepository.getRidesByUserId(userId, rideStatus, status, isDriver).getMany();
+        const where: any = {
+            userId: userId
+        }
+        if (isDriver) {
+            where.isDriver = true;
+        }
+        const userRides = await this.rideUserRepository.find({ where: where });
+        const rideIds = userRides.map(userRide => userRide.rideId);
+        return await this.rideRepository.getRidesByIds(rideIds, rideStatus, status, isDriver).getMany();
     }
 
     async getRideDetails(rideId: number) {
@@ -148,7 +156,7 @@ export class RideService {
                 }, 0);
                 driver.alcs += totalAlcs;
                 await entityManager.save(driver);
-            } else if(status == RideStatus.CANCELLED) {
+            } else if (status == RideStatus.CANCELLED) {
                 const rideUsers = await this.rideUserRepository.find({ where: { rideId: rideId }, relations: ["user"] });
                 for (const rideUser of rideUsers) {
                     const fare = rideUser.fare;
