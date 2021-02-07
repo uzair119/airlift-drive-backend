@@ -66,6 +66,6 @@ export class Ride extends BaseEntity {
     })
     status!: RideStatus;
 
-    @Column({ default: 0 })
+    @Column({ default: 50 })
     perPassengerFare!: number
 }
